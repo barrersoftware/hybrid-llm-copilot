@@ -1,9 +1,13 @@
 # Hybrid LLM with GitHub Copilot
 
+> ⚠️ **IMPORTANT:** This is a **client-side wrapper** that routes queries to tools you install separately. It does NOT include, modify, or redistribute GitHub Copilot, Ollama, or any LLM models. You must have a valid GitHub Copilot subscription to use this tool. See [ATTRIBUTION.md](ATTRIBUTION.md) for full legal details.
+
 **A smart AI assistant for everyone - from solo entrepreneurs to developers - combining local LLMs with GitHub Copilot for faster, private, and cost-effective AI assistance.**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Platform](https://img.shields.io/badge/platform-Linux%20%7C%20macOS%20%7C%20Windows-blue)](https://github.com/barrersoftware/hybrid-llm-copilot)
+
+---
 
 ---
 
