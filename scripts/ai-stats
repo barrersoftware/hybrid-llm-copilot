@@ -1,0 +1,30 @@
+#!/bin/bash
+# Show AI usage statistics
+
+LOG=~/ai-hybrid/logs/queries.log
+
+echo "════════════════════════════════════════════════════════"
+echo "  Hybrid AI Statistics"
+echo "════════════════════════════════════════════════════════"
+echo ""
+
+if [ -f "$LOG" ]; then
+    TOTAL=$(grep "QUERY:" "$LOG" | wc -l)
+    LOCAL=$(grep "ROUTE: local" "$LOG" | wc -l)
+    COPILOT=$(grep "ROUTE: copilot" "$LOG" | wc -l)
+    FALLBACK=$(grep "FALLBACK:" "$LOG" | wc -l)
+    
+    echo "Total Queries: $TOTAL"
+    echo ""
+    echo "Routing:"
+    echo "  Local:   $LOCAL ($(awk "BEGIN {printf \"%.1f\", ($LOCAL/$TOTAL)*100}")%)"
+    echo "  Copilot: $COPILOT ($(awk "BEGIN {printf \"%.1f\", ($COPILOT/$TOTAL)*100}")%)"
+    echo "  Fallbacks: $FALLBACK"
+    echo ""
+    echo "Last 5 queries:"
+    grep "QUERY:" "$LOG" | tail -5 | sed 's/^/  /'
+else
+    echo "No queries logged yet"
+fi
+echo ""
+echo "════════════════════════════════════════════════════════"

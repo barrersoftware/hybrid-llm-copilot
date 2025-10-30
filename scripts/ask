@@ -1,0 +1,84 @@
+#!/bin/bash
+# Memory-Aware Hybrid LLM System v2
+
+QUERY="$*"
+LOG_FILE=~/ai-hybrid/logs/queries.log
+DB=~/.ai_memory.db
+
+echo "[$(date +'%Y-%m-%d %H:%M:%S')] QUERY: $QUERY" >> "$LOG_FILE"
+
+# Get context from memory
+get_context() {
+    CONTEXT=""
+    ACTIVE=$(sqlite3 "$DB" "SELECT name, description FROM active_tasks WHERE status='active' LIMIT 3" 2>/dev/null)
+    if [ ! -z "$ACTIVE" ]; then
+        CONTEXT+="Active: $ACTIVE. "
+    fi
+    RECENT=$(sqlite3 "$DB" "SELECT description FROM command_log ORDER BY timestamp DESC LIMIT 3" 2>/dev/null | head -3 | tr '\n' ' ')
+    if [ ! -z "$RECENT" ]; then
+        CONTEXT+="Recent: $RECENT"
+    fi
+    echo "$CONTEXT"
+}
+
+# Classify query
+classify_query() {
+    local q="$1"
+    local words=$(echo "$q" | wc -w)
+    
+    if [[ "$q" =~ (status|what.*doing|current|progress|android|build.*complete|what.*running) ]]; then
+        echo "context"
+    elif [[ "$q" =~ ^(what|how|syntax|flag|command|show|list) ]] && [ "$words" -lt 10 ]; then
+        echo "simple"
+    else
+        echo "complex"
+    fi
+}
+
+COMPLEXITY=$(classify_query "$QUERY")
+
+case $COMPLEXITY in
+    context)
+        # Needs memory context
+        echo "🧠 [Memory-Aware]" >&2
+        echo "[$(date +'%Y-%m-%d %H:%M:%S')] ROUTE: memory" >> "$LOG_FILE"
+        
+        CONTEXT=$(get_context)
+        if [ ! -z "$CONTEXT" ]; then
+            echo "Context from memory: $CONTEXT" >&2
+            echo ""
+            # Answer directly from memory when possible
+            if [[ "$QUERY" =~ android.*build ]]; then
+                sqlite3 "$DB" "SELECT description FROM active_tasks WHERE name LIKE '%Android%'"
+            elif [[ "$QUERY" =~ status|current|progress ]]; then
+                echo "Active tasks:"
+                sqlite3 "$DB" "SELECT name, status, description FROM active_tasks WHERE status='active'"
+            else
+                # Fall back to Copilot CLI with context
+                echo "$CONTEXT Query: $QUERY" | gh copilot explain -
+            fi
+        else
+            gh copilot explain "$QUERY"
+        fi
+        ;;
+        
+    simple)
+        echo "🔹 [Local]" >&2
+        echo "[$(date +'%Y-%m-%d %H:%M:%S')] ROUTE: local" >> "$LOG_FILE"
+        
+        RESPONSE=$(ollama run deepseek-coder:1.3b "$QUERY" 2>/dev/null | head -20)
+        
+        if [ ${#RESPONSE} -lt 20 ]; then
+            echo "🔸 [Fallback to Copilot]" >&2
+            gh copilot explain "$QUERY"
+        else
+            echo "$RESPONSE"
+        fi
+        ;;
+        
+    *)
+        echo "🔶 [Copilot]" >&2
+        echo "[$(date +'%Y-%m-%d %H:%M:%S')] ROUTE: copilot" >> "$LOG_FILE"
+        gh copilot explain "$QUERY"
+        ;;
+esac

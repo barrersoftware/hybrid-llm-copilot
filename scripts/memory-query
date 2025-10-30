@@ -1,0 +1,24 @@
+#!/bin/bash
+# Query AI memory database directly
+
+DB=~/.ai_memory.db
+
+case "$1" in
+    status)
+        echo "=== Current Status ==="
+        sqlite3 "$DB" "SELECT name, status, description FROM active_tasks WHERE status='active'"
+        ;;
+    recent)
+        echo "=== Recent Activity ==="
+        sqlite3 "$DB" "SELECT timestamp, category, description FROM command_log ORDER BY timestamp DESC LIMIT 10"
+        ;;
+    build)
+        echo "=== Build Status ==="
+        sqlite3 "$DB" "SELECT key, value FROM state WHERE key LIKE '%build%' OR key LIKE '%chromium%'"
+        ;;
+    *)
+        echo "Usage: memory-query [status|recent|build]"
+        echo ""
+        echo "Query AI memory database for context"
+        ;;
+esac
