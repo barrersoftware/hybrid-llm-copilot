@@ -1,18 +1,33 @@
 # Hybrid LLM with GitHub Copilot
 
-**A smart AI assistant that combines local LLMs with GitHub Copilot (Sonnet 3.5) for the best of both worlds.**
+**A smart AI assistant for everyone - from solo entrepreneurs to developers - combining local LLMs with GitHub Copilot for faster, private, and cost-effective AI assistance.**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Platform](https://img.shields.io/badge/platform-Linux%20%7C%20macOS%20%7C%20Windows-blue)](https://github.com/barrersoftware/hybrid-llm-copilot)
 
 ---
 
-## 🎯 What Is This?
+## 🎯 Who Is This For?
+
+### Perfect For:
+- 🚀 **Entrepreneurs & Small Business Owners** - Need quick answers without paying per query
+- 💼 **Freelancers** - Managing multiple projects, need fast context switching
+- 👨‍💻 **Developers** - Building, debugging, learning new technologies
+- 📚 **Students** - Learning to code, need instant syntax help
+- 🎨 **Content Creators** - Researching, fact-checking, getting ideas
+- 🔧 **IT Professionals** - Server management, troubleshooting, scripting
+
+### Why?
+You're already paying for GitHub Copilot. This makes it **faster** for simple queries while keeping the quality high for complex ones, **plus** adds memory so it never forgets what you're working on.
+
+---
+
+## ✨ What Is This?
 
 A **memory-aware hybrid AI system** that intelligently routes queries between:
 
 1. **Local Model** (DeepSeek Coder) - Fast, free, private
-2. **GitHub Copilot** (Claude Sonnet 3.5) - Powerful, context-aware
+2. **GitHub Copilot** (Claude Sonnet 3.5) - Powerful, context-aware  
 3. **Memory Database** (SQLite) - Remembers your work, prevents looping
 
 ### Smart Routing
@@ -36,20 +51,20 @@ A **memory-aware hybrid AI system** that intelligently routes queries between:
 - ✅ **Learning-ready** - can fine-tune over time
 
 ### Privacy & Cost
-- ✅ **Private**: Simple queries stay local
+- ✅ **Private**: Simple queries stay local (never sent anywhere)
 - ✅ **Cost-effective**: Uses GitHub Copilot you already pay for
 - ✅ **No extra subscriptions**: Just needs Copilot Pro/Business
 - ✅ **Offline capable**: Local model works without internet
 
 ---
 
-## 🚀 Quick Start
+## �� Quick Start
 
 ### Prerequisites
 
-- [GitHub Copilot](https://github.com/features/copilot) subscription (Pro or Business)
+- [GitHub Copilot](https://github.com/features/copilot) subscription (Pro or Business) - $10-19/month
 - [GitHub CLI](https://cli.github.com/) (`gh`) installed and authenticated
-- [Ollama](https://ollama.com/) for local models (optional but recommended)
+- [Ollama](https://ollama.com/) for local models (free, open source)
 
 ### Installation
 
@@ -79,17 +94,49 @@ cd hybrid-llm-copilot
 ### First Use
 
 ```bash
-# Ask a simple question (local)
+# Ask a simple question (local - instant)
 ask "what is the grep flag for recursive search?"
 
-# Ask something complex (Copilot)
-ask "create a systemd service for monitoring"
-
-# Check status (memory database)
+# Ask about your current work (memory - instant)
 ask "what am I currently working on?"
+
+# Ask something complex (Copilot - high quality)
+ask "create a business plan outline for a SaaS startup"
 
 # View statistics
 ai-stats
+```
+
+---
+
+## 💡 Real-World Use Cases
+
+### For Entrepreneurs
+```bash
+ask "create a pitch deck outline"
+ask "what's my project status?"
+ask "draft a customer email about shipping delays"
+```
+
+### For Developers
+```bash
+ask "what's the git command to undo last commit?"
+ask "is my build done?"
+ask "debug this error: connection refused"
+```
+
+### For Students
+```bash
+ask "explain Python loops"
+ask "what homework did I just complete?"
+ask "create a study schedule for 5 subjects"
+```
+
+### For Content Creators
+```bash
+ask "research topics on sustainable tech"
+ask "what articles have I written this week?"
+ask "generate 10 YouTube video ideas about cooking"
 ```
 
 ---
@@ -120,19 +167,19 @@ User Query
 ### Routing Logic
 
 **Memory Database Queries** (Instant):
-- Status questions: "what's running?", "is X done?"
-- Context queries: "what did we just do?"
-- Project state: "current build status?"
+- "What am I working on?"
+- "Is my project done?"
+- "What did I just complete?"
 
 **Local Model** (< 1 second):
-- Command syntax: "grep flags", "tar extract"
-- Simple lookups: "git status command"
-- Basic code snippets
+- Command syntax: "how to copy files?"
+- Simple lookups: "what is HTML?"
+- Basic questions: "list git commands"
 
 **GitHub Copilot** (2-5 seconds):
-- Complex generation: "create systemd service"
-- Debugging: "why did my build fail?"
-- Architecture: "design X system"
+- Business tasks: "create invoice template"
+- Complex generation: "write marketing email"
+- Debugging: "why isn't this working?"
 
 ---
 
@@ -145,68 +192,65 @@ The system maintains a SQLite database with:
 - **Active tasks** - What you're currently working on
 - **Recent completions** - What was just done
 - **Command history** - Recent actions taken
-- **System state** - Build progress, tool status
-- **Restrictions** - Things not to do
+- **Project state** - Current status
+- **Notes & reminders** - Things to remember
 
 ### Loop Prevention
 
 **Without Memory:**
 ```
-You: "Is the build done?"
-AI: "I don't know, let me help you check..."
-You: "Is the build done?" (5 minutes later)
-AI: "I don't know, let me help you check..." (repeats)
+You: "What's the status of my project?"
+AI: "I don't have that information..."
+You: [5 minutes later] "What's the status?"
+AI: "I don't have that information..." (frustrating!)
 ```
 
 **With Memory:**
 ```
-You: "Is the build done?"
-AI: [Queries database] "Android build: Phase 2, 45% complete"
-You: "Is the build done?" (5 minutes later)
-AI: [Queries database] "Android build: Phase 2, 67% complete"
+You: "What's the status of my project?"
+AI: "Project XYZ: 75% complete, last updated 10 minutes ago"
+You: [5 minutes later] "What's the status?"
+AI: "Project XYZ: 78% complete, just deployed to staging"
 ```
 
 ---
 
 ## 📖 Usage Examples
 
-### Example 1: Quick Command Lookup
+### Example 1: Quick Syntax Lookup
 
 ```bash
-$ ask "what's the tar command to extract?"
+$ ask "how do I compress a folder?"
 🔹 [Local Model]
-tar -xzf archive.tar.gz
+tar -czf archive.tar.gz folder_name/
 ```
 
-### Example 2: Complex Task
+### Example 2: Business Task
 
 ```bash
-$ ask "create a bash script to monitor a build"
+$ ask "write a professional email declining a meeting"
 🔶 [GitHub Copilot]
-[Full script with monitoring, notifications, error handling]
+[Full professional email template with warm tone]
 ```
 
 ### Example 3: Status Query
 
 ```bash
-$ ask "what am I working on?"
+$ ask "what projects am I working on?"
 🧠 [Memory Database]
-Active tasks:
-- Android APK Build (Phase 2: Building, 45%)
-- Chromium build monitoring
-
-Recent completions:
-- GitHub release v131.0.6778.69 published
-- Windows portable package created
+Active projects:
+- Website redesign (80% complete)
+- Client proposal (draft ready)
+- Blog post (in review)
 ```
 
-### Example 4: Context-Aware Response
+### Example 4: Context-Aware Help
 
 ```bash
-$ ask "how do I test the android build?"
+$ ask "how do I test this?"
 🔶 [Copilot with Memory Context]
-[Context from memory: Android v131.0.6778.69 building]
-[Specific instructions for YOUR build]
+[Context from memory: You're working on website redesign]
+[Specific testing instructions for YOUR project]
 ```
 
 ---
@@ -227,33 +271,15 @@ simple_threshold=10  # Words to consider query "simple"
 local_min_response=20  # Min chars before fallback
 
 [memory]
-database=~/.ai_memory.db
+database=~/.local/share/hybrid-llm/memory.db
 update_interval=600  # 10 minutes
-```
-
-### Memory Database
-
-Initialize your own memory:
-
-```bash
-# Create database
-hybrid-llm init-memory
-
-# Add active task
-hybrid-llm memory add-task "Building Project X"
-
-# Mark task complete
-hybrid-llm memory complete-task "Building Project X"
-
-# Query memory
-hybrid-llm memory query
 ```
 
 ---
 
 ## 📈 Statistics
 
-Track your usage patterns:
+Track your usage and savings:
 
 ```bash
 $ ai-stats
@@ -269,29 +295,17 @@ Routing:
   Local:   67 (47.2%)  - Free local model
   Copilot: 52 (36.6%)  - GitHub Copilot
 
-Cost Savings:
-  Local handled: 67 queries
-  Would cost ~$0.67 if all Copilot
+Time Saved:
+  Local handled: 67 queries instantly
+  Average time saved: ~2 seconds per query
+  Total: ~2.2 minutes saved this week
 
-Last 5 queries:
-  [2025-10-30 16:45] android build status (memory)
-  [2025-10-30 16:42] grep recursive flag (local)
-  [2025-10-30 16:38] create systemd service (copilot)
-  [2025-10-30 16:35] what's running? (memory)
-  [2025-10-30 16:30] tar extract syntax (local)
+Cost Efficiency:
+  Using Copilot Pro: $10/month (unlimited)
+  Without hybrid: Would need faster responses = frustration
+  With hybrid: 63% queries instant = productivity boost
 ════════════════════════════════════════════════════════
 ```
-
----
-
-## 🎓 Learning System (Coming Soon)
-
-The system is designed to learn from your usage:
-
-1. **Collect** - Saves successful Copilot responses
-2. **Analyze** - Identifies patterns in your workflow
-3. **Fine-tune** - Updates local model weekly
-4. **Improve** - Local model gets better at YOUR tasks
 
 ---
 
@@ -332,32 +346,121 @@ hybrid-llm memory recent          # Recent activity
 
 Contributions welcome! Please see [CONTRIBUTING.md](CONTRIBUTING.md)
 
-### Development Setup
+---
 
-```bash
-# Clone
-git clone https://github.com/barrersoftware/hybrid-llm-copilot.git
+## ⚖️ Legal & Attribution
 
-# Install dev dependencies
-pip install -r requirements-dev.txt
+### Trademarks & Copyright
 
-# Run tests
-./test.sh
-```
+This project integrates with and references the following trademarked products and services:
+
+- **GitHub®** and **GitHub Copilot®** are registered trademarks of **GitHub, Inc.** (a subsidiary of Microsoft Corporation)
+- **Microsoft®** is a registered trademark of **Microsoft Corporation**
+- **Anthropic** and **Claude™** are trademarks of **Anthropic, PBC**
+- **Ollama™** is a trademark of Ollama, Inc.
+- **DeepSeek** is a trademark of DeepSeek AI
+
+### Important Disclaimers
+
+⚠️ **This project is NOT:**
+- Affiliated with, endorsed by, or sponsored by GitHub, Microsoft, Anthropic, or any LLM provider
+- A modification or fork of GitHub Copilot
+- Sharing, redistributing, or reverse-engineering any proprietary systems
+- Circumventing any terms of service
+
+✅ **This project IS:**
+- An independent tool that **uses** GitHub Copilot via its official CLI
+- A client-side router that directs queries to appropriate services
+- Fully compliant with GitHub Copilot's Terms of Service
+- Using only official, documented APIs and CLI tools
+- Open source (MIT License) for the routing logic only
+
+### What This Tool Does
+
+This tool acts as a **smart wrapper** around official tools:
+1. **GitHub CLI (`gh`)** - Official GitHub command-line tool
+2. **Ollama** - Open source local LLM runtime
+3. **SQLite** - Open source database
+
+It does NOT:
+- ❌ Modify GitHub Copilot
+- ❌ Access GitHub's servers directly
+- ❌ Reverse engineer any APIs
+- ❌ Redistribute proprietary code
+- ❌ Bypass authentication or payment
+
+It DOES:
+- ✅ Route queries to the appropriate tool (local or Copilot)
+- ✅ Use GitHub Copilot via official `gh` CLI commands
+- ✅ Maintain a local memory database (your data only)
+- ✅ Provide usage statistics
+
+### Requirements
+
+To use this tool, you MUST:
+- ✅ Have a valid GitHub Copilot subscription (Pro or Business)
+- ✅ Authenticate via official GitHub CLI
+- ✅ Comply with [GitHub Copilot Terms of Service](https://github.com/features/copilot/terms)
+- ✅ Comply with [GitHub Terms of Service](https://docs.github.com/en/site-policy/github-terms/github-terms-of-service)
+
+### Data & Privacy
+
+- **Local model queries**: Stay 100% on your computer (Ollama)
+- **Copilot queries**: Sent to GitHub/Microsoft/Anthropic per their terms
+- **Memory database**: Stored locally, never uploaded
+- **No tracking**: This tool collects no telemetry
+
+### License
+
+This project's **routing logic and scripts** are licensed under the MIT License.
+
+The underlying services have their own licenses:
+- **GitHub Copilot**: Proprietary (subscription required)
+- **Ollama**: MIT License
+- **DeepSeek Coder**: Proprietary (free to use via Ollama)
+- **SQLite**: Public Domain
 
 ---
 
-## 📄 License
+## 📄 MIT License
 
-MIT License - see [LICENSE](LICENSE)
+```
+MIT License
+
+Copyright (c) 2025 Barrer Software
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+```
 
 ---
 
 ## 🙏 Acknowledgments
 
-- [GitHub Copilot](https://github.com/features/copilot) - Powered by Claude Sonnet 3.5
-- [Ollama](https://ollama.com/) - Local model runtime
-- [DeepSeek Coder](https://github.com/deepseek-ai/DeepSeek-Coder) - Excellent local coding model
+This project would not be possible without:
+
+- **GitHub & Microsoft** - For creating GitHub Copilot and providing official CLI access
+- **Anthropic** - For developing Claude (Sonnet 3.5), which powers GitHub Copilot
+- **Ollama team** - For making local LLMs accessible and easy to run
+- **DeepSeek AI** - For creating excellent open coding models
+- **Open source community** - For tools, libraries, and inspiration
+
+Thank you for making AI accessible to everyone! 🙏
 
 ---
 
@@ -381,10 +484,14 @@ MIT License - see [LICENSE](LICENSE)
 - [ ] VSCode extension
 - [ ] Response caching
 - [ ] Multi-model support
-- [ ] Confidence scoring
+- [ ] Business workflow templates
 
 ---
 
 **Built with ❤️ by [Barrer Software](https://barrersoftware.com)**
 
-*Making AI assistance faster, smarter, and more private.*
+*Making AI assistance faster, smarter, and more accessible to everyone.*
+
+---
+
+**Disclaimer**: This is an independent open-source project. Not affiliated with GitHub, Microsoft, Anthropic, or any LLM provider.
